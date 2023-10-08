@@ -1,6 +1,7 @@
 package kerp.sextou.websocketexample.config;
 
 import kerp.sextou.websocketexample.vo.KerpMessage;
+import kerp.sextou.websocketexample.vo.PlayerPoker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,11 @@ public class WSEvtListener {
     @EventListener
     public void handleWSDisconnectListener(SessionDisconnectEvent evt) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(evt.getMessage());
-        KerpMessage user = (KerpMessage) headerAccessor.getSessionAttributes().get("user");
-        if (user != null) {
-            System.out.printf("User disconnected: %s", user.getSender());
+        PlayerPoker player = (PlayerPoker) headerAccessor.getSessionAttributes().get("player");
+        if (player != null) {
+            System.out.printf("Player disconnected: %s", player.getUsername());
             System.out.println();
-            KerpMessage kerpMsg = new KerpMessage(null, user.getSender(), "LEAVE");
+            KerpMessage kerpMsg = new KerpMessage("LEAVE", player.getUsername(), "LEAVE");
             messageTemplate.convertAndSend("/topic/public", kerpMsg);
         }
     }
