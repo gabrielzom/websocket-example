@@ -13,7 +13,7 @@ function connect(evt) {
     button.removeEventListener('click', connect, true)
     button.addEventListener('click', sendMessage, true)
     button.innerText = 'Send Message'
-    const sock = new SockJS('http://localhost:8080/ws')
+    const sock = new SockJS('/ws')
     stompClient = Stomp.over(sock)
     stompClient.connect({}, onConnected, onError)
     evt.preventDefault()
